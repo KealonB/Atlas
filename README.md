@@ -1,55 +1,54 @@
-# ATLAS — Spatial Project Twin (Prototype v0.1)
+# ATLAS v0.2 — Field Edition
 
-A working, **local-first** PDF project viewer and field as-built prototype intended for electrical, low-voltage, ICT, and hospital project teams. Static website: no backend, no paid service, no account required. Start in a **six-floor sample building**, or make a new project and load your own PDF floor sheets.
+Static, local-first spatial project twin for PDF floor plans and low-voltage field records. This update adds **multiple independent projects**, an **iPhone-friendly text note editor**, and a **Theme Studio** with preset and fully editable interface palettes.
 
-## Features in v0.1
+## Important: update without losing your v0.1.1 work
 
-- Import local PDF sheets; assign multiple pages to individual building floors.
-- Zoom/pan 2D plans with mouse, wheel, or touch. Click to add or move symbols.
-- Interactive, orbitable **2.5D exploded stack of floor-plan images**: click a floor to navigate to it. This is NOT reconstructed 3D BIM geometry.
-- Symbols for data, wireless APs, cameras, card readers, fiber/coax outlets, telecom rooms, sleeves, pull boxes and text.
-- As-built, Design, and Redline toggles, color and label size editing, notes, status, telecom room, patch panel, port and cable ID.
-- Draw cable paths, rectangles for revision areas, and dimension lines after per-floor scale calibration.
-- Attach photos to individual field records.
-- Search all records and navigate to a map pin. Clickable drop index with CSV import/export.
-- Export all sheets into a **flattened high-resolution PDF** (not original vector PDF). Exports include visible markups and labels.
-- Export/import a **complete project backup** (`.atlas.json`) including original PDFs and linked photos.
-- Browser IndexedDB storage; automatic local saves, no server-side upload. Deep links resolve when the destination project is present locally.
+1. **Before deploying**, open your CURRENT v0.1.1 ATLAS site in Safari or Chrome, choose **Project → Export project backup**, and save the `.atlas.json` file somewhere safe (Files/iCloud/Drive). Repeat for important jobs. Do not clear Safari website data.
+2. **Use your existing GitHub repository and existing published URL.** Browser IndexedDB storage is scoped to the website origin. Moving to another domain or opening a local HTML preview will not show your existing projects automatically.
+3. For a **single-file deployment**, rename `ATLAS_v0.2_Standalone.html` to `index.html` and replace your repository's old `index.html`. No other app files are needed for that deployment.
+4. For a **multi-file deployment**, upload/replace `index.html`, `app.js`, `style.css`, and `manifest.webmanifest` from this ZIP at the root of your repository. Keep `.nojekyll` and the GitHub Actions workflow as included. The updated `index.html` uses `?v=0.2.0` cache-busting for CSS/JS.
+5. Wait for GitHub Pages deployment, then reload your existing Pages site in **Safari**. ATLAS v0.2 automatically migrates the old active v0.1.1 project into its saved project library. This is a **one-time migration**; the previous `active` backup in IndexedDB is left intact for recovery.
+6. Tap **Projects** to create a second job, return to the first job, and confirm the original six-floor demo or existing project records are present.
+7. Tap **Theme** to open Theme Studio. Choose a preset or edit the 12 colors by swatch or six-digit hex code. Changes are a device-wide preference; the original PDF/symbol label colors are separate.
+8. On any 2D floor, choose **Text**, tap the drawing, enter note text, adjust size/color and background, then choose **Place note**. With **Select** active, tap the note again to edit it. Notes can also be edited via the element properties button.
 
-## Publish to GitHub Pages, directly from your iPhone, Windows PC or Mac
+**Data safety:** ATLAS does not upload PDFs to GitHub. PDFs, markups, assets and project records remain in that browser's IndexedDB. Different devices will have different libraries. Export an `.atlas.json` backup for **each** project. To bring in a backup, use **Projects → Import backup**; this now creates a separate imported project, rather than replacing the current workspace.
 
-1. Create a **new GitHub repository** (for example `atlas-twin`). Public GitHub Pages hosting serves the app code; your imported project files stay in browser storage.
-2. Upload **all** the files from this repository, including `index.html`, `app.js`, `style.css`, `manifest.webmanifest`, `.nojekyll`, and `.github/workflows/deploy.yml` to the repository root.
-3. In **Settings → Pages**, choose **GitHub Actions** under *Build and deployment* (the included workflow publishes automatically when you commit to `main`).
-4. Open the Pages URL after the workflow is complete (typically `https://YOURUSERNAME.github.io/atlas-twin/`). Or, for manual publishing, choose deploy from the `main` branch root if GitHub offers it.
+## New in v0.2
 
-For a quick local test, serve the folder using `python3 -m http.server 8080`, then open `http://localhost:8080`. The six-floor demo runs without external libraries. **PDF import needs an internet connection to load Mozilla PDF.js from a CDN** when first used; original PDF files are not transmitted to that CDN. PDF.js is loaded as code, not with the content of your plans.
+- **Projects dashboard:** Create, list, open, and delete jobs without overwriting other saved work. Each job keeps independent floors, drawings, annotations and drop records. Deleting a job is permanent; export it first. Projects are selectable one at a time (not a split-screen multi-project view).
+- **iPhone note editor:** A real textarea with a mobile keyboard, multiline text, text size, color, background plate and bold options. Save/cancel behavior keeps original notes safe. The note reopens by tapping it when Select is active.
+- **Theme Studio:** Midnight, Blueprint, Stealth, Arctic, Sunset. Edit backgrounds, panels, surfaces, controls, borders, primary/secondary text, three accents, warning and error colors. All theme preferences saved locally and applied across projects. Your imported plan image and existing annotation colors are not silently changed.
+- **Project-aware record links:** Copied links now include both project ID and annotation ID. They work on devices that have that same project ID locally.
+- **Deployment improvement:** Cache-busted separate source assets and a standalone single-file site.
 
-## Field usage
+## Existing features retained
 
-1. Select **Project → New empty project** to leave the demo. Click **Import PDFs**; choose which pages represent floors. For a PDF containing multiple sheets, name them individually.
-2. Click a floor in the left navigator or switch to **Spatial 3D** and click a floor slab.
-3. Select a symbol in the bottom toolbar and tap the drawing. Select the new symbol to edit its identifier, font/label size, color, TR, panel, port, status, and notes.
-4. Use **Path** and tap multiple points, then Finish. For distances, calibrate the floor using two known endpoints, then use Measure.
-5. Use **Project → Export as-built PDF**, **Export drop index CSV**, and **Export project backup** regularly.
-6. For a backup on a new device, **Project → Restore project backup** and choose the `.atlas.json` file.
+PDF upload with multiple pages, 2D pan/zoom and pins, exploded 2.5D floor stack, telecom/drop metadata, index/search, linework and clouds, CSV import/export, file/photo links, JSON project backups, and flattened as-built PDF output.
 
-## Caveats and next versions
+## Known limitations
 
-This prototype is a single-device, local database, not yet suitable as the sole system of record for critical installations. Browsers can remove stored data, private mode can block storage, and the location URL does not synchronize content. Daily backups are essential. Markup exports are rasterized. Real 3D model geometry, collision detection, user accounts, authentication, multi-user merges, CAD/Revit/IFC import, automatic floor alignment, native iOS/Android packaging, audit-grade revisions and permissions are future upgrades. Manual per-floor alignment offsets in the prototype are visual only. The browser session has access to files in memory; it is not cryptographically encrypted by ATLAS.
+- Not a true BIM model or Revit reader. The exploded view shows stacked 2D sheets.
+- No multi-user accounts, live synchronization, cloud backups, automatic CAD object extraction, or actual team permissions. GitHub Pages serves public application code, **not** uploaded private project data.
+- Browser local storage can be lost due to storage cleanup, changing domain, device reset or private browsing. Backups are crucial. If storage is blocked, a **SESSION-ONLY** warning appears.
+- PDF.js is fetched from a CDN for PDF import on demand; this may require connectivity. The source PDF content remains local.
+- The original 2D/3D viewer and as-built PDF export are prototype-quality; verify all dimensions and print fidelity before relying on an exported package for construction.
+- Uploaded PDF pages have been tested in earlier v0.1.1; not every vendor PDF or iPhone/Safari combination has been tested in v0.2.
+- Theme customization covers the application's semantic UI palette, not every intrinsic browser control, diagram icon or source drawing pixel.
 
-## Design / tech
+## GitHub Pages (multi-file version)
 
-- Framework-free HTML, CSS, and JavaScript (no build process required).
-- Local IndexedDB storage.
-- HTML Canvas viewer and drawing coordinate system normalized to each PDF page.
-- CSS 3D layered floor assembly with mouse orbit, zoom, touch controls.
-- PDF.js from a CDN, only on PDF import.
-- Native PDF 1.4 file writer: JPEG image XObjects + visible annotation layers flattened into output.
-- GitHub Actions Pages deployment included.
+Repository files:
 
-The included sample project uses **synthetic demo plans** and is **not to be used for construction**.
+- `index.html`: main entry
+- `app.js`: no-build JavaScript application
+- `style.css`: application and theme styling
+- `manifest.webmanifest`: PWA manifest metadata
+- `.nojekyll` and `.github/workflows/deploy.yml`: GitHub Pages GitHub Actions deployment
 
-### No-build single-file option
+Settings → Pages → Source: GitHub Actions, then push to `main`. Alternatively select branch deploy / root if your repository uses it.
 
-The separately supplied `ATLAS_Standalone_GitHub.html` has the full CSS and JavaScript embedded. Rename it `index.html`, upload it to the root of a GitHub repository, and use **Settings → Pages → Deploy from a branch → main / (root)** when available. It runs on GitHub Pages without a build step. You still need internet the first time you import a PDF to load PDF.js.
+## Test coverage
+
+Chromium browser tests verified demo start, dashboard, second-project creation/switching/deletion, isolation and preservation of note records between jobs, note editor edits and colors, five theme presets and custom color application, small-screen modal visibility, and a real touch-size canvas placement workflow. These tests were run in a browser context with **temporary session storage** because local browser navigation was restricted, so persistence on real GitHub Pages/Safari must still be confirmed on your device. Source checked with `node --check`. These are prototype checks, not exhaustive cross-device QA.
