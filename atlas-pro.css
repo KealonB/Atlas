@@ -1,0 +1,47 @@
+/* ATLAS Pro: placement bar, cable/MAC cards, spare rows, phone/tablet layout */
+.place-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:6px 14px;background:var(--atlas-panel2,#101c2c);border-top:1px solid var(--atlas-line,#223248);font-size:11px;color:var(--atlas-muted,#849bb0)}
+.place-bar.hidden{display:none}
+.place-bar label{display:flex;flex-direction:column;gap:2px;font-size:9px;letter-spacing:.06em;text-transform:uppercase}
+.place-bar input,.place-bar select{width:74px;min-height:30px;padding:4px 6px;border-radius:7px;border:1px solid var(--atlas-line,#223248);background:var(--atlas-panel3,#162338);color:var(--atlas-text,#ebf3fb);font:600 13px 'DM Sans',sans-serif}
+.place-bar .pb-tpl input{width:190px}
+.place-bar .pb-check{flex-direction:row;align-items:center;gap:5px}.place-bar .pb-check input{width:auto;min-height:0}
+.place-bar .pb-title{font-weight:700;letter-spacing:.1em}
+#pbNext{font:700 15px 'Space Grotesk',monospace;color:var(--atlas-accent,#59e5c8);min-width:110px;margin-right:6px}
+.pb-toggle{display:none}
+.pro-fields .cable-card{border:1px solid var(--atlas-line,#223248);border-radius:10px;padding:8px;margin:6px 0;background:#0000001a}
+.btn.mini{padding:4px 9px;font-size:11px;min-height:28px}
+.rn-table{max-height:44vh;overflow:auto;margin-top:12px}
+.void-row td{opacity:.55;font-style:italic}
+.pill.void{background:#2a3240;color:#9aa8b8}
+.pill.mac-add{background:#62eace33;color:#62eace}.pill.mac-move{background:#ffca7a33;color:#ffca7a}.pill.mac-change{background:#a896ff33;color:#a896ff}.pill.mac-remove{background:#ff788b33;color:#ff788b}
+.idx-metrics{grid-template-columns:repeat(5,minmax(110px,1fr))!important;max-width:900px;margin-bottom:24px}
+/* header never clips the Import button */
+.topbar{min-width:0;overflow:hidden}
+@media (max-width:1280px){.search-launch span:not(.key){display:none}.search-launch{min-width:0}}
+@media (max-width:1100px){.topbar .hide-small{display:none}.mode-indicator{display:none}}
+/* tablet + phone: big touch targets, collapsible ID bar, tool tray that wraps instead of hiding tools off-screen */
+@media (max-width:1280px){
+  .tool-dock{flex-wrap:wrap;overflow-x:visible;row-gap:6px;min-height:0;height:auto}
+  .tool-dock .dock-title{display:none}
+}
+@media (max-width:900px){
+  .place-bar label:not(.pb-main){display:none}
+  .place-bar.expanded label{display:flex}
+  .pb-toggle{display:inline-flex}
+  .place-bar label[data-main],.place-bar label:nth-of-type(1),.place-bar label:nth-of-type(3),.place-bar label:nth-of-type(4){display:flex}
+  .tool-dock{flex-wrap:wrap;overflow-x:visible;gap:6px;padding:6px 8px;min-height:0}
+  .tool-dock .dock-title,.tool-dock .dock-divider{display:none}
+  .tool-dock .dock-group{display:flex;flex-wrap:wrap;gap:6px}
+  .tool-dock .tool{min-width:52px;min-height:48px}
+}
+@media (max-width:720px){
+  .place-bar input,.place-bar select{min-height:38px;font-size:16px} /* 16px stops iOS zoom-on-focus */
+  .place-bar .pb-tpl input{width:150px}
+  .tool-dock{max-height:30vh;overflow-y:auto}
+  .tool-dock .tool{min-width:46px;min-height:46px;font-size:10px}
+  .index-view .data-table{font-size:12px}
+}
+@media (max-width:720px){
+  /* inspector becomes a bottom sheet instead of covering the whole plan */
+  .inspector{left:0;right:0;width:auto!important;top:auto!important;height:62dvh;border-radius:16px 16px 0 0;box-shadow:0 -14px 50px #000b}
+}

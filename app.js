@@ -315,4 +315,4 @@ async function boot(){
    $('#app').innerHTML=`<div class="loading-screen startup-failure"><span class="brand-glyph">⚠</span><h1>ATLAS COULD NOT START</h1><p>${esc(e?.message||'An unexpected startup error occurred')}</p><p>Open the published GitHub Pages HTTPS website in Safari or Chrome—not the HTML file preview.</p><button class="restart-btn" onclick="location.reload()">Try again</button></div>`;
  }
 }
-boot();
+/* boot() is called by atlas-pro.js after its overrides load */

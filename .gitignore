@@ -1,0 +1,5 @@
+samples/
+shots/
+*.patch
+node_modules/
+tests/synth-rotated.pdf
