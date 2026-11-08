@@ -79,6 +79,7 @@ deleteSelected = function () {
 /* Placement bar: sticky TR / room / panel / next port / cables per drop + live next-ID preview */
 // Phone toolbar: a compact row of common tools plus a "More" toggle that opens the full tray.
 // Pure UI: no project data is touched. Desktop/tablet hide the More button via CSS.
+const PHONE_DOCK_MQ = "(max-width:720px),(max-height:500px) and (orientation:landscape)";
 const PRIMARY_TOOLS = ["select", "pan", "data", "note", "measure"];
 function syncDockMore(on) {
   const b = $("#dockMore"); if (!b) return;
@@ -98,6 +99,14 @@ renderTools = function () {
   if (dock && !$("#dockMore")) {
     dock.insertAdjacentHTML("beforeend", `<button class="tool dock-more" id="dockMore" type="button" aria-controls="toolDock" aria-expanded="false" aria-label="All tools"><span class="sym">⋯</span><span class="lbl">More</span></button>`);
     syncDockMore(dock.classList.contains("expanded"));
+    // Inspector opening on a phone closes the tool tray so the two overlays never stack over the plan.
+    const insp = $("#inspector");
+    if (insp && !insp.dataset.trayWatch) {
+      insp.dataset.trayWatch = "1";
+      new MutationObserver(() => {
+        if (!insp.classList.contains("hide-mobile") && !insp.classList.contains("hidden") && dock.classList.contains("expanded") && matchMedia(PHONE_DOCK_MQ).matches) { dock.classList.remove("expanded"); syncDockMore(false); }
+      }).observe(insp, { attributes: true, attributeFilter: ["class"] });
+    }
   }
 };
 const _template = template;
@@ -415,7 +424,7 @@ document.addEventListener("click", (e) => {
   if (t.closest("#pbRenumber,#idxRenumber")) return openRenumber();
   if (t.closest("#pbToggle")) { const on = $("#placeBar").classList.toggle("expanded"); t.closest("#pbToggle").setAttribute("aria-expanded", String(on)); return; }
   if (t.closest("#dockMore")) { const on = $("#toolDock").classList.toggle("expanded"); syncDockMore(on); return; }
-  if (t.closest(".tool[data-tool]") && $("#toolDock")?.classList.contains("expanded") && matchMedia("(max-width:720px)").matches) { $("#toolDock").classList.remove("expanded"); syncDockMore(false); }
+  if (t.closest(".tool[data-tool]") && $("#toolDock")?.classList.contains("expanded") && matchMedia(PHONE_DOCK_MQ).matches) { $("#toolDock").classList.remove("expanded"); syncDockMore(false); }
   const rv = t.closest("[data-restore-void]");
   if (rv) {
     const target = state.marks.find((x) => x.id === selectedId && DEVICE_KINDS.includes(x.kind));
