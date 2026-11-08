@@ -1,6 +1,6 @@
 /* ATLAS offline cache: app shell + vendored pdf.js / pdf-lib. User data lives in IndexedDB, never in this cache. */
-const CACHE = "atlas-shell-v0.3.0";
-const SHELL = ["./", "./index.html", "./style.css?v=0.2.0", "./atlas-pro.css?v=0.3.0", "./app.js?v=0.3.0", "./atlas-ids.js?v=0.3.0", "./atlas-pro.js?v=0.3.0",
+const CACHE = "atlas-shell-v0.3.1";
+const SHELL = ["./", "./index.html", "./style.css?v=0.2.0", "./atlas-pro.css?v=0.3.1", "./app.js?v=0.3.0", "./atlas-ids.js?v=0.3.0", "./atlas-pro.js?v=0.3.1",
   "./atlas-export.js?v=0.3.0", "./manifest.webmanifest", "./icons/atlas-192.png", "./icons/atlas-512.png", "./icons/atlas-180.png",
   "./vendor/pdf.min.js", "./vendor/pdf.worker.min.js", "./vendor/pdf-lib.min.js"];
 self.addEventListener("install", (e) => e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())));

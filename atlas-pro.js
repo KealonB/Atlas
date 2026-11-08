@@ -77,6 +77,29 @@ deleteSelected = function () {
 };
 
 /* Placement bar: sticky TR / room / panel / next port / cables per drop + live next-ID preview */
+// Phone toolbar: a compact row of common tools plus a "More" toggle that opens the full tray.
+// Pure UI: no project data is touched. Desktop/tablet hide the More button via CSS.
+const PRIMARY_TOOLS = ["select", "pan", "data", "note", "measure"];
+function syncDockMore(on) {
+  const b = $("#dockMore"); if (!b) return;
+  b.setAttribute("aria-expanded", String(on));
+  b.querySelector(".sym").textContent = on ? "✕" : "⋯";
+  b.querySelector(".lbl").textContent = on ? "Less" : "More";
+}
+const _renderTools = renderTools;
+renderTools = function () {
+  _renderTools();
+  document.querySelectorAll("#toolDock .tool[data-tool]").forEach((b) => {
+    b.classList.toggle("primary", PRIMARY_TOOLS.includes(b.dataset.tool));
+    b.setAttribute("aria-label", b.title || b.dataset.tool);
+    b.classList.toggle("active", typeof tool !== "undefined" && b.dataset.tool === tool);
+  });
+  const dock = $("#toolDock");
+  if (dock && !$("#dockMore")) {
+    dock.insertAdjacentHTML("beforeend", `<button class="tool dock-more" id="dockMore" type="button" aria-controls="toolDock" aria-expanded="false" aria-label="All tools"><span class="sym">⋯</span><span class="lbl">More</span></button>`);
+    syncDockMore(dock.classList.contains("expanded"));
+  }
+};
 const _template = template;
 template = function () {
   const bar = `<div class="place-bar" id="placeBar">
@@ -91,7 +114,7 @@ template = function () {
   <label class="pb-tpl">ID template<input data-scheme="template" placeholder="{TR}-{PANEL}-{PORT:00}"></label>
   <label class="pb-check"><input type="checkbox" data-pctx="macMode"> Log as MAC add</label>
   <button class="btn" id="pbRenumber" type="button">⇅ Renumber…</button>
-  <button class="btn ghost pb-toggle" id="pbToggle" type="button" aria-label="Show ID settings">⚙</button></div>`;
+  <button class="btn ghost pb-toggle" id="pbToggle" type="button" aria-label="Show ID settings" aria-expanded="false" aria-controls="placeBar">⚙</button></div>`;
   return _template().replace('<div class="tool-dock"', bar + '<div class="tool-dock"');
 };
 function updatePlaceBar() {
@@ -390,7 +413,9 @@ document.addEventListener("change", (e) => {
 document.addEventListener("click", (e) => {
   const t = e.target, m = selMark();
   if (t.closest("#pbRenumber,#idxRenumber")) return openRenumber();
-  if (t.closest("#pbToggle")) return $("#placeBar").classList.toggle("expanded");
+  if (t.closest("#pbToggle")) { const on = $("#placeBar").classList.toggle("expanded"); t.closest("#pbToggle").setAttribute("aria-expanded", String(on)); return; }
+  if (t.closest("#dockMore")) { const on = $("#toolDock").classList.toggle("expanded"); syncDockMore(on); return; }
+  if (t.closest(".tool[data-tool]") && $("#toolDock")?.classList.contains("expanded") && matchMedia("(max-width:720px)").matches) { $("#toolDock").classList.remove("expanded"); syncDockMore(false); }
   const rv = t.closest("[data-restore-void]");
   if (rv) {
     const target = state.marks.find((x) => x.id === selectedId && DEVICE_KINDS.includes(x.kind));

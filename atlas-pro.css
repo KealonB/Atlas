@@ -45,3 +45,41 @@
   /* inspector becomes a bottom sheet instead of covering the whole plan */
   .inspector{left:0;right:0;width:auto!important;top:auto!important;height:62dvh;border-radius:16px 16px 0 0;box-shadow:0 -14px 50px #000b}
 }
+/* v0.3.1 responsive toolbar: phone = compact primary row + More tray; tablet/desktop unchanged. */
+.dock-more{display:none}
+.tool-dock{padding-left:max(8px,env(safe-area-inset-left));padding-right:max(8px,env(safe-area-inset-right))}
+@media (max-width:720px){
+  .tool-dock{display:flex;flex-wrap:nowrap;align-items:stretch;gap:4px;padding:6px max(6px,env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left));min-height:0;max-height:none;overflow:hidden}
+  .tool-dock .dock-title,.tool-dock .dock-divider{display:none}
+  .tool-dock .dock-group{display:contents}
+  .tool-dock .tool{display:none;flex:1 1 0;min-width:44px;max-width:72px;width:auto;height:52px;min-height:44px;padding:0 2px;font-size:10px;overflow:hidden;text-overflow:ellipsis}
+  .tool-dock .tool.primary,.tool-dock .tool.active,.tool-dock .dock-more{display:flex}
+  .tool-dock .dock-more{order:99;color:var(--atlas-text,#ebf3fb);border-color:var(--atlas-line,#223248)}
+  /* More open: full tray, 4-6 per row, scrolls inside itself, never the page */
+  .tool-dock.expanded{flex-wrap:wrap;max-height:min(46dvh,320px);overflow-y:auto;overscroll-behavior:contain}
+  .tool-dock.expanded .tool{display:flex;flex:1 0 calc(20% - 4px);max-width:none}
+  /* placement bar: one slim row (NEXT ID + renumber + settings); fields open with the gear */
+  .place-bar{flex-wrap:nowrap;gap:6px;padding:4px max(10px,env(safe-area-inset-right)) 4px max(10px,env(safe-area-inset-left))}
+  .place-bar label,.place-bar label:nth-of-type(n){display:none}
+  .place-bar #pbNext{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .place-bar .btn{min-height:44px;min-width:44px;flex-shrink:0}
+  .place-bar.expanded{flex-wrap:wrap;max-height:42dvh;overflow-y:auto}
+  .place-bar.expanded label,.place-bar.expanded label:nth-of-type(n){display:flex;flex:1 1 130px}
+  .place-bar.expanded .pb-tpl input{width:100%}
+  .tool-guide{max-width:calc(100% - 16px);white-space:normal;flex-wrap:wrap;gap:8px;bottom:10px}
+  .tool-guide button{min-height:44px}
+}
+@media (max-width:360px){
+  .tool-dock .tool.primary[data-tool="measure"]:not(.active){display:none}
+  .tool-dock.expanded .tool[data-tool="measure"]{display:flex}
+  .tool-dock.expanded .tool{flex-basis:calc(25% - 4px)}
+  .place-bar .pb-title{display:none}
+}
+/* phone landscape: short screen, keep the plan visible */
+@media (max-height:500px) and (orientation:landscape){
+  .workspace-top{height:auto;padding:4px max(10px,env(safe-area-inset-left));flex-direction:row;align-items:center}
+  .workspace-top .breadcrumb{display:none}
+  .tool-dock .tool{height:44px;gap:2px}
+  .tool-dock.expanded{max-height:52dvh}
+  .tool-dock.expanded .tool{flex-basis:calc(12.5% - 4px)}
+}
